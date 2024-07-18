@@ -1,17 +1,34 @@
-import { Link, Route, Switch } from "react-router-dom/cjs/react-router-dom.min";
+import { Link, Route, Switch, useHistory } from "react-router-dom";
 import "./App.css";
 import AddComment from "./components/AddComment";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Comments from "./pages/Comments";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "./contexts/userContext";
 import Favorites from "./components/Favorites/Favorites";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { API } from "./api/api";
 
 function App() {
   const { user, darkMode } = useContext(UserContext);
+  const history = useHistory();
+  useEffect(() => {
+    API.get("/users", {
+      params: {
+        token: localStorage.getItem("token") ?? "abc123",
+      },
+    })
+      .then((res) => {
+        const user = res.data[0];
+        toast(`Tekrar hoş geldin, ${user.first_name}`);
+      })
+      .catch(() => {
+        toast.error("Lütfen tekrar giriş yapınız...");
+        history.push("/login");
+      });
+  }, []);
 
   return (
     <>
