@@ -1,7 +1,8 @@
+import { useSelector } from "react-redux";
 import FavoriteItem from "./FavoriteItem";
 
 export default function FavoriteList() {
-  const favs = [{ title: "item1" }, { title: "item2" }];
+  const favs = useSelector((state) => state.favs);
   return (
     <>
       <div className="">

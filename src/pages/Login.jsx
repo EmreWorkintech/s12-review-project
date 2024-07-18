@@ -20,6 +20,19 @@ export default function Login() {
   const history = useHistory();
   const { changeUser } = useContext(UserContext);
 
+  function toastMessage(user) {
+    toast(`Merhaba ${user.username}. Tekrar hoş geldin...`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  }
+
   const submitFormData = (formData) => {
     API.get("/users", {
       params: {
@@ -29,16 +42,7 @@ export default function Login() {
     })
       .then((res) => {
         const user = res.data[0];
-        toast(`Merhaba ${user.username}. Tekrar hoş geldin...`, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        toastMessage(user);
         changeUser(user);
         console.log(user);
         history.push("/comments");
